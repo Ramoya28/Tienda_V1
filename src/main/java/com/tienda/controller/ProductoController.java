@@ -1,10 +1,12 @@
 package com.tienda.controller;
 
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.tienda.domain.Producto;
 import com.tienda.service.CategoriaService;
 import com.tienda.service.ProductoService;
 import com.tienda.service.impl.FirebaseStorageServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @Controller
 @Slf4j
-@RequestMapping("/producto") //(producto/listado)
+@RequestMapping("/producto") //(/producto)
 public class ProductoController {
-    
+
     @Autowired
     private ProductoService productoService;
     
@@ -28,12 +31,14 @@ public class ProductoController {
     @GetMapping("/listado")
     public String inicio(Model model) {
         var productos = productoService.getProductos(false);
-        model.addAttribute("productos", productos);
-        model.addAttribute("totalProductos", productos.size());
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("productos", productos); //lista de productos
+        model.addAttribute("categorias", categorias);
+        model.addAttribute("totalProductos", productos.size()); //
         return "/producto/listado";
     }
     
-    @GetMapping("/nuevo")
+     @GetMapping("/nuevo")
     public String productoNuevo(Producto producto) {
         return "/producto/modifica";
     }
@@ -69,5 +74,7 @@ public class ProductoController {
         model.addAttribute("categorias", categorias);
         model.addAttribute("producto", producto);
         return "/producto/modifica";
-    }
+    }   
+    
+    
 }
